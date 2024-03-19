@@ -3,10 +3,10 @@ class Diary:
     diary_arr = [] 
 
     def addEntry(self, date, entry, mood):
-        entry_dict = { date:'Date', entry:'Entry', mood:'Mood'} #create dictionary
+        entry_dict = {date:'Date', entry:'Entry', mood:'Mood'}
         self.diary_arr.append(entry_dict)
 
 diary = Diary() #create an instance of diary
-
-diary.addEntry = input() #make for this values will displayed
+diary.addEntry(input()) #I must think how to solve it when I try to add
+#something this add only "date", but entry and mood not
 print("Test", diary.diary_arr)
