@@ -8,6 +8,5 @@ class Diary:
 
 diary = Diary() #create an instance of diary
 
-entry_add = diary.addEntry('12 march', 'I do anal', 'Fine')
+diary.addEntry = input() #make for this values will displayed
 print("Test", diary.diary_arr)
-#next step I should add entry by input
