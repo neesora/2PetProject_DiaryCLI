@@ -10,12 +10,13 @@ class Diary:
         self.diary_arr.append(entry_dict)
     def searchEntry(self):
         searchKey = input("Input date for search entry: ")
-        for entry in self.diary_arr:
+        for entry in self.diary_arr: #that's brute entries
             if searchKey in entry:
                 print(entry)
                 break
             else:
                 print("This entry doesn't found")
+    #make func for modifying entry
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 0. Exit program")
