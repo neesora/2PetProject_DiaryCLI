@@ -8,14 +8,13 @@ class Diary:
         mood = input("Input the mood: ")
         entry_dict = {date:'Date', entry:'Entry', mood:'Mood'}
         self.diary_arr.append(entry_dict)
-    def selector(self):
-        print("Choose what do you want. \n 1. Add new entry \n 0. Exit program")
-        choice = input()
+    def selector(choice):
         while True:
-            if choice == "1":
-                diary.addEntry()#stack in eternal cycle
-                #self.selector() re-call func
-            elif choice == "0":
+            print("Choose what do you want. \n 1. Add new entry \n 0. Exit program")
+            choice = int(input())
+            if choice == 1:
+                diary.addEntry()
+            elif choice == 0:
                 break
             else:
                 print("Choose correct option")
