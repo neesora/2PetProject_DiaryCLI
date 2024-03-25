@@ -17,6 +17,15 @@ class Diary:
             else:
                 print("This entry doesn't found")
     #make func for modifying entry
+    '''def modEntry(self):
+        searchKey = input("Input date for search mod entry: ")
+        for entry in self.diary_arr: #that's brute entries
+            #make options edit entry, edit mood
+            if searchKey in entry:
+                print(entry)
+                break
+            else:
+                print("This entry doesn't found")'''
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 0. Exit program")
