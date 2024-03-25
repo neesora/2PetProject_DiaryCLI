@@ -16,24 +16,27 @@ class Diary:
                 break
             else:
                 print("This entry doesn't found")
-    #make func for modifying entry
-    '''def modEntry(self):
+    def modEntry(self):
         searchKey = input("Input date for search mod entry: ")
-        for entry in self.diary_arr: #that's brute entries
-            #make options edit entry, edit mood
-            if searchKey in entry:
-                print(entry)
+        for entryStr in self.diary_arr:
+            if searchKey in entryStr:
+                entry = input("Input new entry: ")
+                entryUpd = {entry:'Entry'}
+                entryStr.update(entryUpd)#this add element to the end, but didn't replace exist
+                #self.diary_arr.update(entUp)
                 break
             else:
-                print("This entry doesn't found")'''
+                print("This entry doesn't found")
     def selector(choice):
         while True:
-            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 0. Exit program")
+            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 0. Exit program")
             choice = int(input()) #for values in there updating choice should be in while loop.
             if choice == 1:
                 diary.addEntry()
             elif choice == 2:
                 diary.searchEntry()
+            elif choice == 3:
+                diary.modEntry()
             elif choice == 0:
                 break
             else:
