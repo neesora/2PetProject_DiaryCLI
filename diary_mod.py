@@ -18,12 +18,15 @@ class Diary:
                 print("This entry doesn't found")
     def modEntry(self):
         searchKey = input("Input date for search mod entry: ")
-        for entryStr in self.diary_arr:
+        for ind, entryStr in enumerate(self.diary_arr):
             if searchKey in entryStr:
+                date = input("Input new date: ")
                 entry = input("Input new entry: ")
-                entryUpd = {entry:'Entry'}
-                entryStr.update(entryUpd)#this add element to the end, but didn't replace exist
-                #self.diary_arr.update(entUp)
+                mood = input("Input new mood: ")
+                entry_dict = {date:"Date", entry:"Entry", mood:"Mood"}
+                self.diary_arr[ind] = self.diary_arr.append(entry_dict)
+                #self.diary_arr[ind-1].pop() 
+                #re-write it coz String immutable
                 break
             else:
                 print("This entry doesn't found")
