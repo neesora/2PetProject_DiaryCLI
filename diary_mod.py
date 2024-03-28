@@ -35,9 +35,17 @@ class Diary:
                 break
             else:
                 print("This entry doesn't found")
+    def delEntry(self):
+        searchKey = input("Input date for search del entry: ")
+        for ind, entryStr in enumerate(self.diary_arr):
+            if searchKey in entryStr:
+                self.diary_arr[ind] = entryStr.pop()#zero argue isn't working
+                break
+            else:
+                print("This entry doesn't found")        
     def selector(choice):
         while True:
-            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 0. Exit program")
+            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
             choice = int(input()) #for values in there updating choice should be in while loop.
             if choice == 1:
                 diary.addEntry()
@@ -45,6 +53,8 @@ class Diary:
                 diary.searchEntry()
             elif choice == 3:
                 diary.modEntry()
+            elif choice == 4:
+                diary.delEntry()
             elif choice == 0:
                 break
             else:
