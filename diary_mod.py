@@ -1,3 +1,9 @@
+'''
+TODO LIST:
+1. Finish modEntry func
+2. Add remove func
+3. Pair with SQLite
+'''
 class Diary:
 
     diary_arr = []
