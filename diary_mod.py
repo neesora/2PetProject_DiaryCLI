@@ -1,6 +1,7 @@
 '''
 TODO LIST:
-1. Finish modEntry func
+1. Finish modEntry func [+]
+  1.1 If was wrote nothing, keep last value
 2. Add remove func
 3. Pair with SQLite
 '''
@@ -30,9 +31,7 @@ class Diary:
                 entry = input("Input new entry: ")
                 mood = input("Input new mood: ")
                 entry_dict = {date:"Date", entry:"Entry", mood:"Mood"}
-                self.diary_arr[ind] = self.diary_arr.append(entry_dict)
-                #self.diary_arr[ind-1].pop() 
-                #re-write it coz String immutable
+                self.diary_arr[ind] = entry_dict
                 break
             else:
                 print("This entry doesn't found")
