@@ -2,7 +2,7 @@
 TODO LIST:
 1. Finish modEntry func [+]
   1.1 If was wrote nothing, keep last value
-2. Add remove func
+2. Add remove func [+]
 3. Pair with SQLite
 '''
 class Diary:
