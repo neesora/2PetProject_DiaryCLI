@@ -4,7 +4,10 @@ TODO LIST:
   1.1 If was wrote nothing, keep last value
 2. Add remove func [+]
 3. Pair with SQLite
+???. Testing and debugging(create module with data for test-cases)
 '''
+import sqlite3
+con = sqlite3.connect('entries.db')
 class Diary:
 
     diary_arr = []
@@ -42,7 +45,10 @@ class Diary:
                 del self.diary_arr[ind]
                 break
             else:
-                print("This entry doesn't found")        
+                print("This entry doesn't found")
+    def sqlite(self):
+        cur = con.cursor()
+        cur.executemany(self.diary_arr)      
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
@@ -56,11 +62,10 @@ class Diary:
             elif choice == 4:
                 diary.delEntry()
             elif choice == 0:
+                diary.sqlite()
                 break
             else:
                 print("Choose correct option")
 diary = Diary() #create an instance of diary
-#diary.addEntry()
 diary.selector()
-#diary.addEntry(date=input("Input the date: "), entry=input("Input the text: "), mood=input("Input the mood: "))
 print("Test", diary.diary_arr)
