@@ -39,7 +39,7 @@ class Diary:
         searchKey = input("Input date for search del entry: ")
         for ind, entryStr in enumerate(self.diary_arr):
             if searchKey in entryStr:
-                self.diary_arr[ind] = entryStr.pop()#zero argue isn't working
+                del self.diary_arr[ind]
                 break
             else:
                 print("This entry doesn't found")        
