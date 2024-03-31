@@ -52,20 +52,21 @@ class Diary:
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
-            choice = int(input()) #for values in there updating choice should be in while loop.
-            if choice == 1:
-                diary.addEntry()
-            elif choice == 2:
-                diary.searchEntry()
-            elif choice == 3:
-                diary.modEntry()
-            elif choice == 4:
-                diary.delEntry()
-            elif choice == 0:
-                diary.sqlite()
-                break
-            else:
-                print("Choose correct option")
+            choice = int(input())
+            match choice: 
+                case 1:
+                    diary.addEntry()
+                case 2:
+                    diary.searchEntry()
+                case 3:
+                    diary.modEntry()
+                case 4:
+                    diary.delEntry()
+                case 0:
+                    diary.sqlite()
+                    break
+                case _:
+                    print("Choose correct option")
 diary = Diary() #create an instance of diary
 diary.selector()
 print("Test", diary.diary_arr)
