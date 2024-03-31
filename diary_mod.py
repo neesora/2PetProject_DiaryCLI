@@ -8,6 +8,7 @@ TODO LIST:
 '''
 import sqlite3
 con = sqlite3.connect('entries.db')
+cur = con.cursor()
 class Diary:
 
     diary_arr = []
@@ -47,8 +48,18 @@ class Diary:
             else:
                 print("This entry doesn't found")
     def sqlite(self):
-        cur = con.cursor()
-        cur.executemany(self.diary_arr)      
+        string = self.diary_arr
+        for ind, entryStr in enumerate(self.diary_arr):
+            if string in entryStr:
+                self.diary_arr[ind]
+                cur.execute('''CREATE TABLE IF NOT EXISTS Entries(
+                ind INTEGER PRIMARY KEY, date TEXT, entry TEXT, 
+                mood TEXT)''')
+                cur.execute('INSERT INTO Entries VALUES (NULL, :date, :entry, :mood)', string)
+                con.commit()
+                break
+            else:
+                print("This entry doesn't found")      
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
