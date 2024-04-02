@@ -15,13 +15,12 @@ cur.execute('CREATE INDEX IF NOT EXISTS idx_date ON Entries (date)')
 class Diary:
 
 
-    def addEntry(__init__):
+    def addEntry(self):
         date = input("Input the date: ")
         entry = input("Input some text: ")
         mood = input("Input the mood: ")
-        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', date, entry, mood)
+        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', (date, entry, mood))
         con.commit()
-        con.close()
 
     def searchEntry(self):
         searchKey = input("Input date for search entry: ")
@@ -77,5 +76,5 @@ class Diary:
 
 diary = Diary() #create an instance of diary
 #diary.sqlite()
-
+diary.selector()
 #print("Test", diary.diary_arr)
