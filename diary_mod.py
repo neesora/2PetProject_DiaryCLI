@@ -9,16 +9,20 @@ TODO LIST:
 import sqlite3
 con = sqlite3.connect('entries.db')
 cur = con.cursor()
+cur.execute('CREATE TABLE IF NOT EXISTS Entries (date TEXT NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
+cur.execute('CREATE INDEX IF NOT EXISTS idx_date ON Entries (date)')
+
 class Diary:
 
-    diary_arr = []
 
-    def addEntry(self):
+    def addEntry(__init__):
         date = input("Input the date: ")
         entry = input("Input some text: ")
         mood = input("Input the mood: ")
-        entry_dict = {date:'Date', entry:'Entry', mood:'Mood'}
-        self.diary_arr.append(entry_dict)
+        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', date, entry, mood)
+        con.commit()
+        con.close()
+
     def searchEntry(self):
         searchKey = input("Input date for search entry: ")
         for entry in self.diary_arr: #that's brute entries
@@ -27,6 +31,7 @@ class Diary:
                 break
             else:
                 print("This entry doesn't found")
+
     def modEntry(self):
         searchKey = input("Input date for search mod entry: ")
         for ind, entryStr in enumerate(self.diary_arr):
@@ -39,6 +44,7 @@ class Diary:
                 break
             else:
                 print("This entry doesn't found")
+
     def delEntry(self):
         searchKey = input("Input date for search del entry: ")
         for ind, entryStr in enumerate(self.diary_arr):
@@ -47,19 +53,9 @@ class Diary:
                 break
             else:
                 print("This entry doesn't found")
-    def sqlite(self):
-        string = self.diary_arr
-        for ind, entryStr in enumerate(self.diary_arr):
-            if string in entryStr:
-                self.diary_arr[ind]
-                cur.execute('''CREATE TABLE IF NOT EXISTS Entries(
-                ind INTEGER PRIMARY KEY, date TEXT, entry TEXT, 
-                mood TEXT)''')
-                cur.execute('INSERT INTO Entries VALUES (NULL, :date, :entry, :mood)', string)
-                con.commit()
-                break
-            else:
-                print("This entry doesn't found")      
+
+    #def sqlite():
+    
     def selector(choice):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
@@ -78,6 +74,8 @@ class Diary:
                     break
                 case _:
                     print("Choose correct option")
+
 diary = Diary() #create an instance of diary
-diary.selector()
-print("Test", diary.diary_arr)
+#diary.sqlite()
+
+#print("Test", diary.diary_arr)
