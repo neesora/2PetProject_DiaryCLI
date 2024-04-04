@@ -51,11 +51,16 @@ class Diary:
             else:
                 print("This entry doesn't found")
 
-    #def sqlite():
+    def test(self):
+        cur.execute('SELECT * FROM Entries')
+        entries = cur.fetchall()
+        for entry in entries:
+            print('All entries out: ', entry)
+            break
     
     def selector(choice):
         while True:
-            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 0. Exit program")
+            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 5. test \n 0. Exit program")
             choice = int(input())
             match choice: 
                 case 1:
@@ -66,6 +71,8 @@ class Diary:
                     diary.modEntry()
                 case 4:
                     diary.delEntry()
+                case 5:
+                    diary.test()
                 case 0:
                     con.commit()
                     con.close()
