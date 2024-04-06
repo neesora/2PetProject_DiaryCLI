@@ -1,9 +1,10 @@
 '''
 TODO LIST:
 1. Finish modEntry func [+]
-  1.1 If was wrote nothing, keep last value
+  1.1 If was wrote nothing, keep last value[]
 2. Add remove func [+]
-3. Pair with SQLite
+3. Pair with SQLite [+]
+4. Bugs: when I'm add entry it's add Null instead of exist value.
 ???. Testing and debugging(create module with data for test-cases)
 '''
 import sqlite3
