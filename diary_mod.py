@@ -10,8 +10,8 @@ import sqlite3
 from datetime import date
 con = sqlite3.connect('entries.db')
 cur = con.cursor()
-cur.execute('CREATE TABLE IF NOT EXISTS Entries (date TEXT NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
-cur.execute('CREATE INDEX IF NOT EXISTS idx_date ON Entries (date)')
+cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
+cur.execute('CREATE INDEX IF NOT EXISTS idx_date ON Entries (today)')
 
 class Diary:
 
@@ -25,23 +25,21 @@ class Diary:
 
     def searchEntry(self):
         searchKey = input("Input date for search entry: ")
-        conc = cur.execute('SELECT ? FROM Entries;', searchKey)
-        cur.fetchall()
-        print(conc)
+        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
+        row = cur.fetchone()
+    
+        if row:
+            print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
+        else:
+            print('Entry not found')
+
 
     def modEntry(self):
-        searchKey = input("Input date for search mod entry: ")
-        Entries = cur.fetchall()
-        for entryX in Entries:
-            if searchKey in entryX:
-                date = input("Input new date: ")
-                entry = input("Input new entry: ")
-                mood = input("Input new mood: ")
-                cur.execute('UPDATE Entries SET (date = ?, entry = ?, mood = ?) WHERE searchKey;', (date, entry, mood))
-                con.commit()
-                break
-            else:
-                print("This entry doesn't found")
+        today = input("Input date for search mod entry: ")
+        entry = input("Input new entry: ")
+        mood = input("Input new mood: ")
+        cur.execute('UPDATE Entries SET (today=?, entry=?, mood=?) WHERE today=?', (today, entry, mood))
+        con.commit()
 
     def delEntry(self):
         searchKey = input("Input date for search del entry: ")
