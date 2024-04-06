@@ -5,7 +5,9 @@ TODO LIST:
 2. Add remove func [+]
 3. Pair with SQLite [+]
 4. Bugs: when I'm add entry it's add Null instead of exist value.
-???. Testing and debugging(create module with data for test-cases)
+5. CLI
+6. Testing through pytest, unittest
+7. Simple UI
 '''
 import sqlite3
 from datetime import date
