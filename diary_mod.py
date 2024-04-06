@@ -10,8 +10,7 @@ import sqlite3
 from datetime import date
 con = sqlite3.connect('entries.db')
 cur = con.cursor()
-cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
-cur.execute('CREATE INDEX IF NOT EXISTS idx_date ON Entries (today)')
+cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
 
@@ -27,7 +26,6 @@ class Diary:
         searchKey = input("Input date for search entry: ")
         cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
         row = cur.fetchone()
-    
         if row:
             print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
         else:
@@ -35,20 +33,28 @@ class Diary:
 
 
     def modEntry(self):
-        today = input("Input date for search mod entry: ")
-        entry = input("Input new entry: ")
-        mood = input("Input new mood: ")
-        cur.execute('UPDATE Entries SET (today=?, entry=?, mood=?) WHERE today=?', (today, entry, mood))
-        con.commit()
+        searchKey = input("Input date for modification entry: ")
+        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
+        row = cur.fetchone()
+        if row != None:
+            today = searchKey
+            entry = input("Input new entry: ")
+            mood = input("Input new mood: ")
+            cur.execute('INSERT INTO entries(today, entry, mood) VALUES(?, ?, ?) ON CONFLICT(today) DO UPDATE SET entry=excluded.entry, mood=excluded.mood', (today, entry, mood))
+            con.commit()
+        else:
+            print('Try to input another date.')
 
     def delEntry(self):
-        searchKey = input("Input date for search del entry: ")
-        for ind, entryStr in enumerate(self.diary_arr):
-            if searchKey in entryStr:
-                del self.diary_arr[ind]
-                break
-            else:
-                print("This entry doesn't found")
+        searchKey = input("Input date for delete entry: ")
+        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
+        row = cur.fetchone()
+        if row != None:
+            today = searchKey
+            cur.execute('DELETE FROM entries WHERE (today=?)', (today,))
+            con.commit()
+        else:
+            print('Entry not found.')
 
     def test(self):
         cur.execute('SELECT * FROM Entries')
@@ -79,6 +85,4 @@ class Diary:
                     print("Choose correct option")
 
 diary = Diary() #create an instance of diary
-#diary.sqlite()
 diary.selector()
-#print("Test", diary.diary_arr)
