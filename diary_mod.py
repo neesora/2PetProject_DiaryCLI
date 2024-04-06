@@ -7,6 +7,7 @@ TODO LIST:
 ???. Testing and debugging(create module with data for test-cases)
 '''
 import sqlite3
+from datetime import date
 con = sqlite3.connect('entries.db')
 cur = con.cursor()
 cur.execute('CREATE TABLE IF NOT EXISTS Entries (date TEXT NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
@@ -16,10 +17,10 @@ class Diary:
 
 
     def addEntry(self):
-        date = input("Input the date: ")
+        today = date.today()
         entry = input("Input some text: ")
         mood = input("Input the mood: ")
-        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', (date, entry, mood))
+        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', (today, entry, mood))
         con.commit()
 
     def searchEntry(self):
