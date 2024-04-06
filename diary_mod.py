@@ -5,6 +5,7 @@ TODO LIST:
 2. Add remove func [+]
 3. Pair with SQLite [+]
 4. Bugs: when I'm add entry it's add Null instead of exist value.
+???. Add more than 1 entry per day
 5. CLI
 6. Testing through pytest, unittest
 7. Simple UI
