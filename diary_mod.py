@@ -54,9 +54,8 @@ class Diary:
     def test(self):
         cur.execute('SELECT * FROM Entries')
         entries = cur.fetchall()
-        for entry in entries:
-            print('All entries out: ', entry)
-            break
+        print('All entries out: ', entries)
+            
     
     def selector(choice):
         while True:
