@@ -9,6 +9,9 @@ TODO LIST:
 5. CLI
 6. Testing through pytest, unittest
 7. Simple UI
+DESC:
+- list, dict, index, class, def(how to working with obj)
+- sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
 from datetime import date
