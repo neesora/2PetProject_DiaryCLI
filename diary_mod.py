@@ -14,10 +14,19 @@ DESC:
 - sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
+from sqlite_utils import Database
 from datetime import date
-con = sqlite3.connect('entries.db')
+con = Database(sqlite3.connect("Entries.db"))
+Entries = con["Entries.db"]
+Entries.create({
+    "id": int,
+    "today": str,
+    "entry": str,
+    "mood": str,
+}, pk="id", not_null=set())
+#con = sqlite3.connect('entries.db')
 cur = con.cursor()
-cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
+#cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
 
