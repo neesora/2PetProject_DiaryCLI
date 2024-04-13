@@ -14,38 +14,38 @@ DESC:
 - sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
+import random
 from sqlite_utils import Database
 from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
-Entries.create({
-    "id": int,
-    "today": str,
-    "entry": str,
-    "mood": str,
-}, pk="id", not_null=set())
 #con = sqlite3.connect('entries.db')
-cur = con.cursor()
+#cur = con.cursor()
 #cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
 
 
     def addEntry(self):
+        idX = random.randrange(999999)
         today = date.today()
         entry = input("Input some text: ")
         mood = input("Input the mood: ")
-        cur.execute('INSERT INTO Entries VALUES (?, ?, ?);', (today, entry, mood))
-        con.commit()
+        con["Entries.db"].insert_all([{
+                "id": idX,
+                "today": today,
+                "entry": entry,
+                "mood": mood,
+        }])
 
     def searchEntry(self):
         searchKey = input("Input date for search entry: ")
-        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
-        row = cur.fetchone()
-        if row:
-            print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
-        else:
-            print('Entry not found')
+        for row in con["Entries.db"].rows_where(today=searchKey):
+            print(row)
+        #if row:
+          #  print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
+       # else:
+          #  print('Entry not found')
 
 
     def modEntry(self):
@@ -71,6 +71,14 @@ class Diary:
             con.commit()
         else:
             print('Entry not found.')
+
+    def createDB(self):
+        Entries.create({
+            "id": int,
+            "today": str,
+            "entry": str,
+            "mood": str,
+        }, pk="id", not_null=set())
 
     def test(self):
         cur.execute('SELECT * FROM Entries')
