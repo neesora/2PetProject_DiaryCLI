@@ -45,17 +45,10 @@ class Diary:
 
 
     def modEntry(self):
-        id = input("Input date for modification entry: ")
-        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
-        row = cur.fetchone()
-        if row != None:
-            today = searchKey
-            entry = input("Input new entry: ")
-            mood = input("Input new mood: ")
-            cur.execute('INSERT INTO entries(today, entry, mood) VALUES(?, ?, ?) ON CONFLICT(today) DO UPDATE SET entry=excluded.entry, mood=excluded.mood', (today, entry, mood))
-            con.commit()
-        else:
-            print('Try to input another date.')
+        id = input("Input id to edit entry: ")
+        entry = input("Input new entry: ")
+        mood = input("Input new mood: ")
+        con["Entries.db"].update(id, {entry, mood})
 
     def delEntry(self):
         searchKey = input("Input date for delete entry: ")
