@@ -39,17 +39,13 @@ class Diary:
         }])
 
     def searchEntry(self):
-        searchKey = input("Input date for search entry: ")
-        for row in con["Entries.db"].rows_where(today=searchKey):
+        today = input("Input date for search entry: ")
+        for row in con["Entries.db"].rows_where(select='id, today, entry, mood'):
             print(row)
-        #if row:
-          #  print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
-       # else:
-          #  print('Entry not found')
 
 
     def modEntry(self):
-        searchKey = input("Input date for modification entry: ")
+        id = input("Input date for modification entry: ")
         cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
         row = cur.fetchone()
         if row != None:
