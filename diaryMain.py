@@ -15,12 +15,13 @@ DESC:
 '''
 import sqlite3
 import random
+from sqlite_utils.db import NotFoundError
 from sqlite_utils import Database
 from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
 #con = sqlite3.connect('entries.db')
-cur = con.cursor()
+#cur = con.cursor()
 #cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
@@ -40,11 +41,26 @@ class Diary:
 
     def searchEntry(self): #it isn't working
         today = input("Input date for search entry: ")
-        for row in con["Entries.db"].rows_where(select='id, today, entry, mood'):
+        for row in con["Entries.db"].rows_where("today"):
             print(row)
 
 
-    #def modEntry(self):
+    def modEntry(self):
+        today = date.today()
+        searchKey = input("Input id to edit row: ")
+        idX = con.execute("select rowid from [Entries.db] where id=?", (searchKey,))
+        try:
+            con["Entries.db"].get(idX)
+            entry = input("Input the new entry text: ")
+            mood = input("Input new mood: ")
+            con["Entries.db"].upsert({
+                    "id": searchKey,
+                    "today": today,
+                    "entry": entry,
+                    "mood": mood,
+            }, pk="id")
+        except NotFoundError:
+            print("That's entry doesn't exist")
 
     def delEntry(self):
         searchKey = input("Input date for delete entry: ")
