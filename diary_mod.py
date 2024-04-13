@@ -20,7 +20,7 @@ from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
 #con = sqlite3.connect('entries.db')
-#cur = con.cursor()
+cur = con.cursor()
 #cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
@@ -38,28 +38,13 @@ class Diary:
                 "mood": mood,
         }])
 
-    def searchEntry(self):
-        searchKey = input("Input date for search entry: ")
-        for row in con["Entries.db"].rows_where(today=searchKey):
+    def searchEntry(self): #it isn't working
+        today = input("Input date for search entry: ")
+        for row in con["Entries.db"].rows_where(select='id, today, entry, mood'):
             print(row)
-        #if row:
-          #  print('Date: {}\nEntry: {}\nMood: {}'.format(row[0], row[1], row[2]))
-       # else:
-          #  print('Entry not found')
 
 
-    def modEntry(self):
-        searchKey = input("Input date for modification entry: ")
-        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
-        row = cur.fetchone()
-        if row != None:
-            today = searchKey
-            entry = input("Input new entry: ")
-            mood = input("Input new mood: ")
-            cur.execute('INSERT INTO entries(today, entry, mood) VALUES(?, ?, ?) ON CONFLICT(today) DO UPDATE SET entry=excluded.entry, mood=excluded.mood', (today, entry, mood))
-            con.commit()
-        else:
-            print('Try to input another date.')
+    #def modEntry(self):
 
     def delEntry(self):
         searchKey = input("Input date for delete entry: ")
@@ -80,7 +65,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def test(self):
+    def test(self): #i must rewrite it
         cur.execute('SELECT * FROM Entries')
         entries = cur.fetchall()
         print('All entries out: ', entries)
