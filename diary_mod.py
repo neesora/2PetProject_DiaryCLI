@@ -20,7 +20,7 @@ from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
 #con = sqlite3.connect('entries.db')
-#cur = con.cursor()
+cur = con.cursor()
 #cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
 
 class Diary:
@@ -38,17 +38,13 @@ class Diary:
                 "mood": mood,
         }])
 
-    def searchEntry(self):
+    def searchEntry(self): #it isn't working
         today = input("Input date for search entry: ")
         for row in con["Entries.db"].rows_where(select='id, today, entry, mood'):
             print(row)
 
 
-    def modEntry(self):
-        id = input("Input id to edit entry: ")
-        entry = input("Input new entry: ")
-        mood = input("Input new mood: ")
-        con["Entries.db"].update(id, {entry, mood})
+    #def modEntry(self):
 
     def delEntry(self):
         searchKey = input("Input date for delete entry: ")
@@ -69,7 +65,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def test(self):
+    def test(self): #i must rewrite it
         cur.execute('SELECT * FROM Entries')
         entries = cur.fetchall()
         print('All entries out: ', entries)
