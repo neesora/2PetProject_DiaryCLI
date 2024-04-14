@@ -22,7 +22,6 @@ con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
 class Diary:
 
-
     def addEntry(self):
         idX = random.randrange(999999)
         today = date.today()
