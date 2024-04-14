@@ -15,8 +15,8 @@ DESC:
 '''
 import sqlite3
 import random
-from sqlite_utils.db import NotFoundError
 from sqlite_utils import Database
+from sqlite_utils.db import NotFoundError
 from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
@@ -39,18 +39,16 @@ class Diary:
                 "mood": mood,
         }])
 
-    def searchEntry(self): #it isn't working
-        today = input("Input date for search entry: ")
+    def searchEntry(self):
+        today = input("Input date for search entries by day: ")
         for row in con["Entries.db"].rows_where("today"):
             print(row)
-
 
     def modEntry(self):
         today = date.today()
         searchKey = input("Input id to edit row: ")
-        idX = con.execute("select rowid from [Entries.db] where id=?", (searchKey,))
         try:
-            con["Entries.db"].get(idX)
+            con["Entries.db"].get(searchKey) 
             entry = input("Input the new entry text: ")
             mood = input("Input new mood: ")
             con["Entries.db"].upsert({
@@ -63,15 +61,12 @@ class Diary:
             print("That's entry doesn't exist")
 
     def delEntry(self):
-        searchKey = input("Input date for delete entry: ")
-        cur.execute('SELECT today, entry, mood FROM Entries WHERE today=?', (searchKey,))
-        row = cur.fetchone()
-        if row != None:
-            today = searchKey
-            cur.execute('DELETE FROM entries WHERE (today=?)', (today,))
-            con.commit()
-        else:
-            print('Entry not found.')
+        searchKey = input("Input id to delete row: ")
+        try:
+            con["Entries.db"].get(searchKey)
+            con["Entries.db"].delete(searchKey)
+        except NotFoundError:
+            print("That's entry doesn't exist")
 
     def createDB(self):
         Entries.create({
@@ -81,10 +76,9 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def test(self): #i must rewrite it
-        cur.execute('SELECT * FROM Entries')
-        entries = cur.fetchall()
-        print('All entries out: ', entries)
+    def test(self):
+        for row in con["Entries.db"].rows:
+            print('All entries out: ', row)
             
     
     def selector(choice):
@@ -102,6 +96,8 @@ class Diary:
                     diary.delEntry()
                 case 5:
                     diary.test()
+                case 99:
+                    diary.createDB()
                 case 0:
                     con.commit()
                     con.close()
