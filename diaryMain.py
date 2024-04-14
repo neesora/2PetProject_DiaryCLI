@@ -4,8 +4,8 @@ TODO LIST:
   1.1 If was wrote nothing, keep last value[]
 2. Add remove func [+]
 3. Pair with SQLite [+]
-4. Bugs: when I'm add entry it's add Null instead of exist value.
-???. Add more than 1 entry per day
+4. Bugs: when I'm add entry it's add Null instead of exist value.[+]
+???. Add more than 1 entry per day [+]
 5. CLI
 6. Testing through pytest, unittest
 7. Simple UI
@@ -20,10 +20,6 @@ from sqlite_utils.db import NotFoundError
 from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
-#con = sqlite3.connect('entries.db')
-#cur = con.cursor()
-#cur.execute('CREATE TABLE IF NOT EXISTS Entries (today TEXT PRIMARY KEY NOT NULL, entry TEXT NOT NULL, mood TEXT NOT NULL)')
-
 class Diary:
 
 
@@ -39,9 +35,10 @@ class Diary:
                 "mood": mood,
         }])
 
-    def searchEntry(self):
+    def searchEntry(self): #show all entries but no special
         today = input("Input date for search entries by day: ")
-        for row in con["Entries.db"].rows_where("today"):
+        rows = con["Entries.db"].where("today=?", (today))
+        for row in rows:
             print(row)
 
     def modEntry(self):
