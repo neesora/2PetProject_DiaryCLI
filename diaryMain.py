@@ -15,8 +15,8 @@ DESC:
 '''
 import sqlite3
 import random
-from sqlite_utils.db import NotFoundError
 from sqlite_utils import Database
+from sqlite_utils.db import NotFoundError
 from datetime import date
 con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
@@ -40,17 +40,15 @@ class Diary:
         }])
 
     def searchEntry(self): #it isn't working
-        today = input("Input date for search entry: ")
+        today = input("Input date for search entries by day: ")
         for row in con["Entries.db"].rows_where("today"):
             print(row)
-
 
     def modEntry(self):
         today = date.today()
         searchKey = input("Input id to edit row: ")
-        idX = con.execute("select rowid from [Entries.db] where id=?", (searchKey,))
         try:
-            con["Entries.db"].get(idX)
+            con["Entries.db"].get(searchKey) 
             entry = input("Input the new entry text: ")
             mood = input("Input new mood: ")
             con["Entries.db"].upsert({
