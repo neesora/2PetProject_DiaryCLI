@@ -22,24 +22,26 @@ con = Database(sqlite3.connect("Entries.db"))
 Entries = con["Entries.db"]
 class Diary:
 
-
     def addEntry(self):
         idX = random.randrange(999999)
         today = date.today()
         entry = input("Input some text: ")
         mood = input("Input the mood: ")
-        con["Entries.db"].insert_all([{
-                "id": idX,
-                "today": today,
-                "entry": entry,
-                "mood": mood,
-        }])
+        try: #check pk for exist
+            con["Entries.db"].insert_all([{
+                    "id": idX,
+                    "today": today,
+                    "entry": entry,
+                    "mood": mood,
+            }], pk="id")
+        except sqlite3.IntegrityError:
+            print("Record already exists with that primary key")
 
     def searchEntry(self): #show all entries but no special
         today = input("Input date for search entries by day: ")
-        rows = con["Entries.db"].where("today=?", (today))
-        for row in rows:
-            print(row)
+        print(con.execute('select id, today, entry, mood from Entries where today=?').fetchone()[today])
+        #for row in rows:
+            #print(row)
 
     def modEntry(self):
         today = date.today()
@@ -55,7 +57,7 @@ class Diary:
                     "mood": mood,
             }, pk="id")
         except NotFoundError:
-            print("That's entry doesn't exist")
+            print("That entry doesn't exist")
 
     def delEntry(self):
         searchKey = input("Input id to delete row: ")
@@ -63,7 +65,7 @@ class Diary:
             con["Entries.db"].get(searchKey)
             con["Entries.db"].delete(searchKey)
         except NotFoundError:
-            print("That's entry doesn't exist")
+            print("That entry doesn't exist")
 
     def createDB(self):
         Entries.create({
