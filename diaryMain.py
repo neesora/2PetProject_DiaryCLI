@@ -37,12 +37,12 @@ class Diary:
         except sqlite3.IntegrityError:
             print("Record already exists with that primary key")
 
-    def searchEntry(self): #show all entries but no special
-        today = input("Input date for search entries by day: ")
-        print(con.execute('select id, today, entry, mood from Entries where today=?').fetchone()[today])
-        #for row in rows:
-            #print(row)
-
+    def searchEntry(self): 
+        inp = input("Input day to search: ")
+        entries = con["Entries"].rows_where("today = ?", [inp])
+        for entry in entries:
+            print(entry)
+        
     def modEntry(self):
         today = date.today()
         searchKey = input("Input id to edit row: ")
@@ -50,7 +50,7 @@ class Diary:
             con["Entries.db"].get(searchKey) 
             entry = input("Input the new entry text: ")
             mood = input("Input new mood: ")
-            con["Entries.db"].upsert({
+            con["Entries"].upsert({
                     "id": searchKey,
                     "today": today,
                     "entry": entry,
@@ -62,8 +62,7 @@ class Diary:
     def delEntry(self):
         searchKey = input("Input id to delete row: ")
         try:
-            con["Entries.db"].get(searchKey)
-            con["Entries.db"].delete(searchKey)
+            con["Entries"].delete(searchKey)
         except NotFoundError:
             print("That entry doesn't exist")
 
