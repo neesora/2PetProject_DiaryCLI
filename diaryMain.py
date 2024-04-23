@@ -18,90 +18,89 @@ import random
 from sqlite_utils import Database
 from sqlite_utils.db import NotFoundError
 from datetime import date
-con = Database(sqlite3.connect("Entries.db"))
-Entries = con["Entries.db"]
+
 class Diary:
-
-    def addEntry(self):
-        idX = random.randrange(999999)
-        today = date.today()
-        entry = input("Input some text: ")
-        mood = input("Input the mood: ")
-        try: #check pk for exist
-            con["Entries.db"].insert_all([{
-                    "id": idX,
-                    "today": today,
-                    "entry": entry,
-                    "mood": mood,
-            }], pk="id")
-        except sqlite3.IntegrityError:
-            print("Record already exists with that primary key")
-
-    def searchEntry(self): 
-        inp = input("Input day to search: ")
-        entries = con["Entries"].rows_where("today = ?", [inp])
-        for entry in entries:
-            print(entry)
-        
-    def modEntry(self):
-        today = date.today()
-        searchKey = input("Input id to edit row: ")
-        try:
-            con["Entries.db"].get(searchKey) 
-            entry = input("Input the new entry text: ")
-            mood = input("Input new mood: ")
-            con["Entries"].upsert({
-                    "id": searchKey,
-                    "today": today,
-                    "entry": entry,
-                    "mood": mood,
-            }, pk="id")
-        except NotFoundError:
-            print("That entry doesn't exist")
-
-    def delEntry(self):
-        searchKey = input("Input id to delete row: ")
-        try:
-            con["Entries"].delete(searchKey)
-        except NotFoundError:
-            print("That entry doesn't exist")
+    def __init__(self):
+        self.con = Database(sqlite3.connect("Entries.db"))
+        self.Entries = self.con["Entries"]
 
     def createDB(self):
-        Entries.create({
+        self.Entries.create({
             "id": int,
             "today": str,
             "entry": str,
             "mood": str,
         }, pk="id", not_null=set())
 
+    def addEntry(self):
+        idX = random.randrange(999999)
+        today = date.today()
+        entry = input("Input some text: ")
+        mood = input("Input the mood: ")
+        try:
+            self.Entries.insert_all([{
+                "id": idX,
+                "today": today,
+                "entry": entry,
+                "mood": mood,
+            }], pk="id")
+        except sqlite3.IntegrityError:
+            print("Record already exists with that primary key")
+
+    def searchEntry(self, input_word):
+        query = f"SELECT * FROM Entries WHERE today LIKE ?"
+        cursor = self.con.execute(query, (f"%{input_word}%",))
+        row = cursor.fetchone()
+        print(row)
+
+    def modEntry(self, searchKey):
+        today = date.today()
+        entry = input("Input the new entry text: ")
+        mood = input("Input new mood: ")
+        try:
+            self.Entries.upsert({
+                "id": searchKey,
+                "today": today,
+                "entry": entry,
+                "mood": mood,
+            }, pk="id")
+        except NotFoundError:
+            print("That entry doesn't exist")
+
+    def delEntry(self, searchKey):
+        try:
+            self.Entries.delete(searchKey)
+        except NotFoundError:
+            print("That entry doesn't exist")
+
     def test(self):
-        for row in con["Entries.db"].rows:
+        for row in self.Entries.rows:
             print('All entries out: ', row)
-            
-    
-    def selector(choice):
+
+    def selector(self):
         while True:
             print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 5. test \n 0. Exit program")
             choice = int(input())
-            match choice: 
+            match choice:
                 case 1:
-                    diary.addEntry()
+                    self.addEntry()
                 case 2:
-                    diary.searchEntry()
+                    input_word = input("Input search: ")
+                    self.searchEntry(input_word)
                 case 3:
-                    diary.modEntry()
+                    searchKey = input("Input id to edit row: ")
+                    self.modEntry(searchKey)
                 case 4:
-                    diary.delEntry()
+                    searchKey = input("Input id to delete row: ")
+                    self.delEntry(searchKey)
                 case 5:
-                    diary.test()
-                case 99:
-                    diary.createDB()
+                    self.test()
                 case 0:
-                    con.commit()
-                    con.close()
+                    self.con.commit()
+                    self.con.close()
                     break
                 case _:
                     print("Choose correct option")
 
-diary = Diary() #create an instance of diary
+diary = Diary()
 diary.selector()
