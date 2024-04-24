@@ -1,12 +1,9 @@
 '''
 TODO LIST:
-1. Finish modEntry func [+]
-  1.1 If was wrote nothing, keep last value[]
-2. Add remove func [+]
-3. Pair with SQLite [+]
-4. Bugs: when I'm add entry it's add Null instead of exist value.[+]
-???. Add more than 1 entry per day [+]
 5. CLI
+6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
+ 6.1 This row right
+ 6.2 Show next(less prioritize)
 6. Testing through pytest, unittest
 7. Simple UI
 DESC:
@@ -96,11 +93,6 @@ class Diary:
                 case 5:
                     self.test()
                 case 0:
-                    self.con.commit()
-                    self.con.close()
                     break
                 case _:
                     print("Choose correct option")
-
-diary = Diary()
-diary.selector()
