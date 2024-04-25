@@ -1,10 +1,21 @@
-import diaryMain as dm
-from argparse import ArgumentParser, Namespace
+import argparse
+from diaryMain import Diary
 
-parser = ArgumentParser()
+def main():
+    diary = Diary()
+    parser = argparse.ArgumentParser(description='Diary CLI')
+    subparsers = parser.add_subparsers(dest='command')
 
-parser.add_argument('searchEntry', help='Search entries through db')
+    create_parser = subparsers.add_parser('create', help='Create the database')
+    create_parser.set_defaults(func=diary.createDB)
 
-args: Namespace = parser.parse_args()
+    add_parser = subparsers.add_parser('add', help='Add a new entry')
+    add_parser.add_argument('--entry', type=str, required=True, help='The text of the entry')
+    add_parser.add_argument('--mood', type=str, required=True, help='The mood of the entry')
+    add_parser.set_defaults(func=lambda args: diary.addEntry(args.entry, args.mood))
 
-print(args.searchEntry)
+    args = parser.parse_args()
+    args.func(args)
+
+if __name__ == '__main__':
+    main()

@@ -29,11 +29,9 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def addEntry(self):
+    def addEntry(self, entry, mood):
         idX = random.randrange(999999)
         today = date.today()
-        entry = input("Input some text: ")
-        mood = input("Input the mood: ")
         try:
             self.Entries.insert_all([{
                 "id": idX,
@@ -50,10 +48,8 @@ class Diary:
         row = cursor.fetchone()
         print(row)
 
-    def modEntry(self, searchKey):
+    def modEntry(self, searchKey, entry, mood):
         today = date.today()
-        entry = input("Input the new entry text: ")
-        mood = input("Input new mood: ")
         try:
             self.Entries.upsert({
                 "id": searchKey,
