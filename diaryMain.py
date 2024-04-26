@@ -29,7 +29,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def addEntry(self, entry, mood):
+    def append(self, entry, mood):
         idX = random.randrange(999999)
         today = date.today()
         try:
@@ -42,17 +42,17 @@ class Diary:
         except sqlite3.IntegrityError:
             print("Record already exists with that primary key")
 
-    def searchEntry(self, input_word):
+    def search(self, search):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"
-        cursor = self.con.execute(query, (f"%{input_word}%",))
+        cursor = self.con.execute(query, (f"%{search}%",))
         row = cursor.fetchone()
-        print(row)
+        return row
 
-    def modEntry(self, searchKey, entry, mood):
+    def change(self, search, entry, mood):
         today = date.today()
         try:
             self.Entries.upsert({
-                "id": searchKey,
+                "id": search,
                 "today": today,
                 "entry": entry,
                 "mood": mood,
@@ -60,35 +60,12 @@ class Diary:
         except NotFoundError:
             print("That entry doesn't exist")
 
-    def delEntry(self, searchKey):
+    def remove(self, remove):
         try:
-            self.Entries.delete(searchKey)
+            self.Entries.delete(remove)
         except NotFoundError:
             print("That entry doesn't exist")
 
     def test(self):
         for row in self.Entries.rows:
             print('All entries out: ', row)
-
-    def selector(self):
-        while True:
-            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 5. test \n 0. Exit program")
-            choice = int(input())
-            match choice:
-                case 1:
-                    self.addEntry()
-                case 2:
-                    input_word = input("Input search: ")
-                    self.searchEntry(input_word)
-                case 3:
-                    searchKey = input("Input id to edit row: ")
-                    self.modEntry(searchKey)
-                case 4:
-                    searchKey = input("Input id to delete row: ")
-                    self.delEntry(searchKey)
-                case 5:
-                    self.test()
-                case 0:
-                    break
-                case _:
-                    print("Choose correct option")
