@@ -1,10 +1,11 @@
-import diaryMain as dm
-from argparse import ArgumentParser, Namespace
+from diaryMain import Diary
+import argparse
 
-parser = ArgumentParser()
+#create the top-level parser and create class-insance
+diary = Diary()
+parser = argparse.ArgumentParser()
+subparsers = parser.add_subparsers(required=True)
 
-parser.add_argument('searchEntry', help='Search entries through db')
-
-args: Namespace = parser.parse_args()
-
-print(args.searchEntry)
+#create the parser for the "add" command
+parser_add = subparsers.add_parser('add')
+parser_add.set_defaults(func=diary.append)
