@@ -29,7 +29,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def append(self):
+    def append(self, entry, mood):
         idX = random.randrange(999999)
         today = date.today()
         entry = input("Input some text: ")
@@ -44,19 +44,17 @@ class Diary:
         except sqlite3.IntegrityError:
             print("Record already exists with that primary key")
 
-    def search(self, input_word):
+    def search(self, search):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"
-        cursor = self.con.execute(query, (f"%{input_word}%",))
+        cursor = self.con.execute(query, (f"%{search}%",))
         row = cursor.fetchone()
-        print(row)
+        return row
 
-    def change(self, searchKey):
+    def change(self, search, entry, mood):
         today = date.today()
-        entry = input("Input the new entry text: ")
-        mood = input("Input new mood: ")
         try:
             self.Entries.upsert({
-                "id": searchKey,
+                "id": search,
                 "today": today,
                 "entry": entry,
                 "mood": mood,
@@ -64,9 +62,9 @@ class Diary:
         except NotFoundError:
             print("That entry doesn't exist")
 
-    def remove(self, searchKey):
+    def remove(self, remove):
         try:
-            self.Entries.delete(searchKey)
+            self.Entries.delete(remove)
         except NotFoundError:
             print("That entry doesn't exist")
 
