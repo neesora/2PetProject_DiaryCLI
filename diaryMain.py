@@ -29,7 +29,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def addEntry(self):
+    def append(self):
         idX = random.randrange(999999)
         today = date.today()
         entry = input("Input some text: ")
@@ -44,13 +44,13 @@ class Diary:
         except sqlite3.IntegrityError:
             print("Record already exists with that primary key")
 
-    def searchEntry(self, input_word):
+    def search(self, input_word):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"
         cursor = self.con.execute(query, (f"%{input_word}%",))
         row = cursor.fetchone()
         print(row)
 
-    def modEntry(self, searchKey):
+    def change(self, searchKey):
         today = date.today()
         entry = input("Input the new entry text: ")
         mood = input("Input new mood: ")
@@ -64,7 +64,7 @@ class Diary:
         except NotFoundError:
             print("That entry doesn't exist")
 
-    def delEntry(self, searchKey):
+    def remove(self, searchKey):
         try:
             self.Entries.delete(searchKey)
         except NotFoundError:
@@ -73,26 +73,3 @@ class Diary:
     def test(self):
         for row in self.Entries.rows:
             print('All entries out: ', row)
-
-    def selector(self):
-        while True:
-            print("Choose what do you want. \n 1. Add new entry \n 2. Search entry by date \n 3. Modify entry \n 4. Remove entry \n 5. test \n 0. Exit program")
-            choice = int(input())
-            match choice:
-                case 1:
-                    self.addEntry()
-                case 2:
-                    input_word = input("Input search: ")
-                    self.searchEntry(input_word)
-                case 3:
-                    searchKey = input("Input id to edit row: ")
-                    self.modEntry(searchKey)
-                case 4:
-                    searchKey = input("Input id to delete row: ")
-                    self.delEntry(searchKey)
-                case 5:
-                    self.test()
-                case 0:
-                    break
-                case _:
-                    print("Choose correct option")
