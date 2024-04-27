@@ -32,8 +32,6 @@ class Diary:
     def append(self, entry, mood):
         idX = random.randrange(999999)
         today = date.today()
-        entry = input("Input some text: ")
-        mood = input("Input the mood: ")
         try:
             self.Entries.insert_all([{
                 "id": idX,
