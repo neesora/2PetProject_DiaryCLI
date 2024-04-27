@@ -1,6 +1,6 @@
 '''
 TODO LIST:
-5. CLI
+5. CLI [+]
 6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
  6.1 This row right
  6.2 Show next(less prioritize)
@@ -71,3 +71,7 @@ class Diary:
     def test(self):
         for row in self.Entries.rows:
             print('All entries out: ', row)
+#def idGenerator(self, id):
+    #create id from 0.
+    #check which number last
+    #+=1 for new entry
