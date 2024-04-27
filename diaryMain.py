@@ -24,9 +24,16 @@ class Diary:
     def idGenerator(self, id):
         query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
         cursor = self.con.execute(query)
-        last_id = cursor.fetchone()[0]
-        id = last_id + 1
-        return id
+        cursor.execute("SELECT COUNT(*) FROM Entries")
+        if cursor.fetchone()[0] > 0:
+            query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
+            cursor = self.con.execute(query)
+            last_id = cursor.fetchone()[0]
+            id = last_id + 1
+            return id
+        else:
+            id = 0
+            return id
 
     def createDB(self):
         self.Entries.create({
@@ -37,7 +44,7 @@ class Diary:
         }, pk="id", not_null=set())
 
     def append(self, entry, mood):
-        self.idX = Diary.idGenerator(self, 0)
+        self.idX = Diary.idGenerator(self, id="")
         today = date.today()
         try:
             self.Entries.insert_all([{
@@ -47,7 +54,8 @@ class Diary:
                 "mood": mood,
             }], pk="id")
         except sqlite3.IntegrityError:
-            return "Error"
+            word = "Error"
+            return word
 
     def search(self, search):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"

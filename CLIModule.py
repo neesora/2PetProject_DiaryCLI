@@ -13,7 +13,7 @@ diary = Diary()
 @click.option("--mood", prompt="Input the mood", help="The mood of the entry")
 def append(entry, mood):
     """Append a new diary entry"""
-    word = diary.append(entry, mood)
+    word = 0
     if word == "Error":
         click.echo(f"Record already exists with that primary key")
     else:
