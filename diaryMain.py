@@ -1,6 +1,6 @@
 '''
 TODO LIST:
-5. CLI
+5. CLI [+]
 6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
  6.1 This row right
  6.2 Show next(less prioritize)
@@ -21,6 +21,20 @@ class Diary:
         self.con = Database(sqlite3.connect("Entries.db"))
         self.Entries = self.con["Entries"]
 
+    def idGenerator(self, id):
+        query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
+        cursor = self.con.execute(query)
+        cursor.execute("SELECT COUNT(*) FROM Entries")
+        if cursor.fetchone()[0] > 0:
+            query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
+            cursor = self.con.execute(query)
+            last_id = cursor.fetchone()[0]
+            id = last_id + 1
+            return id
+        else:
+            id = 0
+            return id
+
     def createDB(self):
         self.Entries.create({
             "id": int,
@@ -30,17 +44,18 @@ class Diary:
         }, pk="id", not_null=set())
 
     def append(self, entry, mood):
-        idX = random.randrange(999999)
+        self.idX = Diary.idGenerator(self, id="")
         today = date.today()
         try:
             self.Entries.insert_all([{
-                "id": idX,
+                "id": self.idX,
                 "today": today,
                 "entry": entry,
                 "mood": mood,
             }], pk="id")
         except sqlite3.IntegrityError:
-            print("Record already exists with that primary key")
+            word = "Error"
+            return word
 
     def search(self, search):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"
@@ -58,14 +73,16 @@ class Diary:
                 "mood": mood,
             }, pk="id")
         except NotFoundError:
-            print("That entry doesn't exist")
+            word = "Error"
+            return word
 
     def remove(self, remove):
         try:
             self.Entries.delete(remove)
         except NotFoundError:
-            print("That entry doesn't exist")
+            word = "Error"
+            return word
 
-    def test(self):
+    def test(self, row):
         for row in self.Entries.rows:
-            print('All entries out: ', row)
+            return row
