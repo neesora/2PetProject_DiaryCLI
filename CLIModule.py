@@ -51,12 +51,5 @@ def remove(remove):
         diary.remove(remove)
         click.echo(f"Row was succesful removed")
 
-@cli.command("test")
-@click.option("--show", prompt="Shows entries.", help="Use --show for see entries.")
-def test(row):
-    #Show all entries
-    diary.test(row)
-    click.echo(f"All entries was showed. ")
-
 if __name__ == '__main__':
     cli()
