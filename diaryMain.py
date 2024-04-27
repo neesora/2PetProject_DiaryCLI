@@ -11,7 +11,6 @@ DESC:
 - sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
-import random
 from sqlite_utils import Database
 from sqlite_utils.db import NotFoundError
 from datetime import date
@@ -30,7 +29,7 @@ class Diary:
         }, pk="id", not_null=set())
 
     def append(self, entry, mood):
-        idX = random.randrange(999999)
+        idX = idGenerator(id)
         today = date.today()
         try:
             self.Entries.insert_all([{
@@ -69,7 +68,10 @@ class Diary:
     def test(self):
         for row in self.Entries.rows:
             print('All entries out: ', row)
-#def idGenerator(self, id):
-    #create id from 0.
-    #check which number last
-    #+=1 for new entry
+
+def idGenerator(self, id):
+    query = "SELECT * FROM Entries ORDER BY idX DESC LIMIT 1;"
+    cursor = self.con.execute(query)
+    last_id = cursor.fetchone()[0]
+    id = last_id + 1
+    return id
