@@ -73,13 +73,15 @@ class Diary:
                 "mood": mood,
             }, pk="id")
         except NotFoundError:
-            return "Error"
+            word = "Error"
+            return word
 
     def remove(self, remove):
         try:
             self.Entries.delete(remove)
         except NotFoundError:
-            return "Error"
+            word = "Error"
+            return word
 
     def test(self):
         for row in self.Entries.rows:
