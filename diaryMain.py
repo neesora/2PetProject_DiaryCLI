@@ -83,6 +83,6 @@ class Diary:
             word = "Error"
             return word
 
-    def test(self):
+    def test(self, row):
         for row in self.Entries.rows:
-            print('All entries out: ', row)
+            return row
