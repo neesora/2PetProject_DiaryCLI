@@ -21,6 +21,13 @@ class Diary:
         self.con = Database(sqlite3.connect("Entries.db"))
         self.Entries = self.con["Entries"]
 
+    def idGenerator(self, id):
+        query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
+        cursor = self.con.execute(query)
+        last_id = cursor.fetchone()[0]
+        id = last_id + 1
+        return id
+
     def createDB(self):
         self.Entries.create({
             "id": int,
@@ -30,17 +37,17 @@ class Diary:
         }, pk="id", not_null=set())
 
     def append(self, entry, mood):
-        idX = random.randrange(999999)
+        self.idX = Diary.idGenerator(self, 0)
         today = date.today()
         try:
             self.Entries.insert_all([{
-                "id": idX,
+                "id": self.idX,
                 "today": today,
                 "entry": entry,
                 "mood": mood,
             }], pk="id")
         except sqlite3.IntegrityError:
-            print("Record already exists with that primary key")
+            return "Error"
 
     def search(self, search):
         query = f"SELECT * FROM Entries WHERE today LIKE ?"
@@ -58,21 +65,14 @@ class Diary:
                 "mood": mood,
             }, pk="id")
         except NotFoundError:
-            print("That entry doesn't exist")
+            return "Error"
 
     def remove(self, remove):
         try:
             self.Entries.delete(remove)
         except NotFoundError:
-            print("That entry doesn't exist")
+            return "Error"
 
     def test(self):
         for row in self.Entries.rows:
             print('All entries out: ', row)
-
-"""def idGenerator(self, id):
-    query = "SELECT * FROM Entries ORDER BY idX DESC LIMIT 1;"
-    cursor = self.con.execute(query)
-    last_id = cursor.fetchone()[0]
-    id = last_id + 1
-    return id"""
