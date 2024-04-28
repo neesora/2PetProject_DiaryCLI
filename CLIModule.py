@@ -1,6 +1,5 @@
 from diaryMain import Diary
 import click
-from sqlite_utils.db import NotFoundError
 
 @click.group()
 def cli():

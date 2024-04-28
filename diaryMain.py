@@ -58,13 +58,22 @@ class Diary:
             return word
 
     def search(self, search):
-        query = f"SELECT * FROM Entries WHERE today LIKE ?"
-        cursor = self.con.execute(query, (f"%{search}%",))
-        row = cursor.fetchone()
-        return row
+        for rightRow in row:
+            query = f"SELECT * FROM Entries WHERE today LIKE ?"
+            cursor = self.con.execute(query, (f"%{search}%",))
+            row = cursor.fetchone()
+            if rightRow == "Yes" or "1":
+                return rightRow
+            elif rightRow == "No" or "2":
+                return
+            
+        #make check will show "you was search this row?" if "2", then next row by prioritize
+        #make for last picked row was selected.
+        #I can create temporary table with query result ORDER BY id and NEXT row which ID <(>) idIter then choice "Yes" or "No"
 
     def change(self, search, entry, mood):
         today = date.today()
+        #here func search with option next row by prioritize or stay
         try:
             self.Entries.upsert({
                 "id": search,
