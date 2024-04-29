@@ -20,11 +20,18 @@ def append(entry, mood):
         click.echo(f"Entry appended successfully!")
 
 @cli.command("search")
-@click.option("-s", "--search", prompt="Input day search", help="Date for search")
-def search(search):
+@click.option("-t", "--today", prompt="Input day search", help="Date for search")
+def search(today, rightRow, answer):
     """Search entry"""
-    row = diary.search(search)
-    click.echo(f"Founded entry: {row}")
+    day = diary.search(today)
+    answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
+    if answer.lower() == "yes" or "1":
+        rightRow = diary.search(rightRow)
+        click.echo(f"Founded entry: {rightRow}")
+    elif answer.lower() == "no" or "2":
+        click.echo("Entry not found")
+    else:
+        click.echo("Invalid input")
 
 @cli.command("edit")
 @click.option("-ed", "--edit", prompt="Input ID for edit", help="Date for search")

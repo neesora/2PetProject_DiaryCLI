@@ -56,14 +56,16 @@ class Diary:
             word = "Error"
             return word
 
-    def search(self, search):
+    def search(self, today, rightRow, answer):
+        number = 1
         for rightRow in row:
-            query = f"SELECT * FROM Entries WHERE today LIKE ?"
-            cursor = self.con.execute(query, (f"%{search}%",))
+            query = f"SELECT * FROM Entries ORDER BY {today} LIMIT 1 OFFSET {number}"
+            cursor = self.con.execute(query)
             row = cursor.fetchone()
-            if rightRow == "Yes" or "1":
+            if answer == "Yes" or "1":
                 return rightRow
-            elif rightRow == "No" or "2":
+            elif answer == "No" or "2":
+                number += 1
                 return
             
         #make check will show "you was search this row?" if "2", then next row by prioritize
