@@ -11,7 +11,6 @@ DESC:
 - sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
-import random
 from sqlite_utils import Database
 from sqlite_utils.db import NotFoundError
 from datetime import date
