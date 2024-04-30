@@ -11,6 +11,7 @@ DESC:
 - sqlite3: create table, set primary key, insert values, modify them, del row
 '''
 import sqlite3
+import click
 from sqlite_utils import Database
 from sqlite_utils.db import NotFoundError
 from datetime import date
@@ -19,6 +20,7 @@ class Diary:
     def __init__(self):
         self.con = Database(sqlite3.connect("Entries.db"))
         self.Entries = self.con["Entries"]
+        self.number = 0
 
     def idGenerator(self, id):
         query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
@@ -56,17 +58,18 @@ class Diary:
             word = "Error"
             return word
 
-    def search(self, today, rightRow, answer):
-        number = 1
-        for rightRow in row:
-            query = f"SELECT * FROM Entries ORDER BY {today} LIMIT 1 OFFSET {number}"
-            cursor = self.con.execute(query)
-            row = cursor.fetchone()
-            if answer == "Yes" or "1":
-                return rightRow
-            elif answer == "No" or "2":
-                number += 1
-                return
+    def search(self, today, answer, row):
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+        cursor = self.con.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+            answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
+            if answer.lower() == "yes":
+                return row
+            else:
+                self.number += 1
+        return None
             
         #make check will show "you was search this row?" if "2", then next row by prioritize
         #make for last picked row was selected.
