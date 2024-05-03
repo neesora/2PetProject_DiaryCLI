@@ -2,9 +2,9 @@
 TODO LIST:
 5. CLI [+]
 6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
- 6.1 This row right
- 6.2 Show next(less prioritize)
-6. Testing through pytest, unittest
+ 6.1 This row right [+]
+ 6.2 Show next(less prioritize) [+]
+6. Testing through pytest, unittest [TBC]
 7. Simple UI
 DESC:
 - list, dict, index, class, def(how to working with obj)
