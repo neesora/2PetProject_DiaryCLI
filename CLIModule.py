@@ -30,16 +30,17 @@ def search(today):
         click.echo("Entry not found")
 
 @cli.command("edit")
-@click.option("-ed", "--edit", prompt="Input ID for edit", help="Date for search")
-@click.option("-en", "--entry", prompt="Input new text", help="The edit entry")
-@click.option("-m", "--mood", prompt="Input new mood", help="The edit mood of the entry")
-def change(search, entry, mood):
+@click.option("-t", "--today", prompt="Input date for search", help="Date for search")
+def search(today):
     """Edit entry"""
-    word = diary.change(search, entry, mood)
-    if word == "Error":
-        click.echo(f"Row isn't founded")
+    row = diary.search(today, None, None)
+    do = diary
+    if row:
+        click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
     else:
-        diary.change(search, entry, mood)
+        diary.change(today, 0, 0, row)
+        click.option("-e", "--entry", prompt="Input new text", help="The edit entry")
+        click.option("-m", "--mood", prompt="Input new mood", help="The edit mood of the entry")
         click.echo(f"Row was succesful edited")
 
 @cli.command("del")

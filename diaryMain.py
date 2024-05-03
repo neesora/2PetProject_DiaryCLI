@@ -76,14 +76,14 @@ class Diary:
         #make for last picked row was selected.
         #I can create temporary table with query result ORDER BY id and NEXT row which ID <(>) idIter then choice "Yes" or "No"
 
-    def change(self, search, entry, mood, row):
+    def change(self, today, entry, mood, row):
         id = pickRow.searchedRow(row)
         id = row[0]
         #here func search with option next row by prioritize or stay
         try:
             self.Entries.upsert({
                 "id": id,
-                "today": search,
+                "today": today,
                 "entry": entry,
                 "mood": mood,
             }, pk="id")
