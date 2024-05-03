@@ -4,8 +4,9 @@ TODO LIST:
 6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
  6.1 This row right [+]
  6.2 Show next(less prioritize) [+]
-6. Testing through pytest, unittest [TBC]
-7. Simple UI
+7. Apply somehow search into modify functions
+8. Testing through pytest, unittest [TBC]
+9. Simple UI
 DESC:
 - list, dict, index, class, def(how to working with obj)
 - sqlite3: create table, set primary key, insert values, modify them, del row
@@ -75,8 +76,9 @@ class Diary:
         #make for last picked row was selected.
         #I can create temporary table with query result ORDER BY id and NEXT row which ID <(>) idIter then choice "Yes" or "No"
 
-    def change(self, search, entry, mood):
-        id = Diary.search(today=search)
+    def change(self, search, entry, mood, row):
+        id = pickRow.searchedRow(row)
+        id = row[0]
         #here func search with option next row by prioritize or stay
         try:
             self.Entries.upsert({
@@ -99,3 +101,6 @@ class Diary:
     def test(self, row):
         for row in self.Entries.rows:
             return row
+class pickRow:
+    def searchedRow(row):
+        row = Diary.search(row)
