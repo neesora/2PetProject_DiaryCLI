@@ -2,10 +2,11 @@
 TODO LIST:
 5. CLI [+]
 6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
- 6.1 This row right
- 6.2 Show next(less prioritize)
-6. Testing through pytest, unittest
-7. Simple UI
+ 6.1 This row right [+]
+ 6.2 Show next(less prioritize) [+]
+7. Apply somehow search into modify functions
+8. Testing through pytest, unittest [TBC]
+9. Simple UI
 DESC:
 - list, dict, index, class, def(how to working with obj)
 - sqlite3: create table, set primary key, insert values, modify them, del row
@@ -70,24 +71,26 @@ class Diary:
             else:
                 self.number += 1
         return None
-            
-        #make check will show "you was search this row?" if "2", then next row by prioritize
-        #make for last picked row was selected.
-        #I can create temporary table with query result ORDER BY id and NEXT row which ID <(>) idIter then choice "Yes" or "No"
 
-    def change(self, search, entry, mood):
-        today = date.today()
-        #here func search with option next row by prioritize or stay
-        try:
-            self.Entries.upsert({
-                "id": search,
-                "today": today,
-                "entry": entry,
-                "mood": mood,
-            }, pk="id")
-        except NotFoundError:
-            word = "Error"
-            return word
+    def change(self, today, row):
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+        cursor = self.con.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+            if click.confirm("This is right row?"):
+                entry = click.prompt("Input new entry", type=str)
+                mood = click.prompt("Input new mood", type=str)
+                self.Entries.upsert({
+                    "id": row[0],
+                    "today": today,
+                    "entry": entry,
+                    "mood": mood,
+                }, pk="id")
+                break
+            else:
+                self.number += 1
+        return None
 
     def remove(self, remove):
         try:
@@ -99,3 +102,26 @@ class Diary:
     def test(self, row):
         for row in self.Entries.rows:
             return row
+'''
+this class include:
+*** Function for searching and selection excpect row
+*** Function for searching and then pick up row for editing
+'''
+class searchMethod:
+    def __init__(self):
+        self.con = Database(sqlite3.connect("Entries.db"))
+        self.Entries = self.con["Entries"]
+        self.number = 0
+
+    def picker(self, today, row):
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+        cursor = self.con.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+            answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
+            if answer.lower() == "yes" or "1":
+                return row[0]
+            else:
+                self.number += 1
+        return None

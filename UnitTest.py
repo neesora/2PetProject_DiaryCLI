@@ -8,7 +8,7 @@ class testDiary(unittest.TestCase):
         self.diary = Diary()
      #Each test method starts with the keyword test_
     def test_append(self):
-        self.assertEqual(self.diary.append("Jojo", "Jojo"), "LMAO")
+        self.assertEqual(self.diary.append("Null", "Fine", "Che"))
 # Executing the tests in the above test case class
 if __name__ == "__main__":
     unittest.main()

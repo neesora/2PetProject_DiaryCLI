@@ -1,12 +1,14 @@
-from diaryMain import Diary
+from diaryMain import Diary, searchMethod
 import click
 
+diary = Diary()
+searchM = searchMethod()
 @click.group()
 def cli():
     """my cli"""
     pass
+
 #create the top-level parser and create class-insance
-diary = Diary()
 @cli.command("append")
 @click.option("-e", "--entry", prompt="Input some text", help="The diary entry")
 @click.option("-m", "--mood", prompt="Input the mood", help="The mood of the entry")
@@ -29,17 +31,14 @@ def search(today):
     else:
         click.echo("Entry not found")
 
-@cli.command("edit")
-@click.option("-ed", "--edit", prompt="Input ID for edit", help="Date for search")
-@click.option("-en", "--entry", prompt="Input new text", help="The edit entry")
-@click.option("-m", "--mood", prompt="Input new mood", help="The edit mood of the entry")
-def change(search, entry, mood):
+@cli.command("change")
+@click.option("-t", "--today", prompt="Input date for search", help="Date for search")
+def picker(today):
     """Edit entry"""
-    word = diary.change(search, entry, mood)
-    if word == "Error":
-        click.echo(f"Row isn't founded")
+    check = diary.change(today, None)
+    if check:
+        click.echo("Entry not found")
     else:
-        diary.change(search, entry, mood)
         click.echo(f"Row was succesful edited")
 
 @cli.command("del")
