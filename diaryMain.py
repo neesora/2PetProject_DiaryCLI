@@ -110,7 +110,7 @@ class searchMethod:
         for row in rows:
             click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
             answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
-            if answer.lower() == "yes":
+            if answer.lower() == "yes" or "1":
                 return row
             else:
                 break
