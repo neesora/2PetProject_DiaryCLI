@@ -1,12 +1,8 @@
 '''
 TODO LIST:
-5. CLI [+]
-6. Redesigne modEntry, delEntry, searchEntry. When you see result, you have choice
- 6.1 This row right [+]
- 6.2 Show next(less prioritize) [+]
-7. Apply somehow search into modify functions
-8. Testing through pytest, unittest [TBC]
-9. Simple UI
+0. Do del func
+1. Do search separate func and connect to edit and del. [TBC]
+2. Simple UI [TBC]
 DESC:
 - list, dict, index, class, def(how to working with obj)
 - sqlite3: create table, set primary key, insert values, modify them, del row
