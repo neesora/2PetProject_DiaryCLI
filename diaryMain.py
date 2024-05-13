@@ -72,19 +72,25 @@ class Diary:
                 self.number += 1
         return None
 
-    def change(self, today, entry, mood):
-        row = searchMethod.picker(row="")
-        #here func search with option next row by prioritize or stay
-        try:
-            self.Entries.upsert({
-                "id": row[0],
-                "today": today,
-                "entry": entry,
-                "mood": mood,
-            }, pk="id")
-        except NotFoundError:
-            word = "Error"
-            return word
+    def change(self, today, row):
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+        cursor = self.con.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+            if click.confirm("This is right row?"):
+                entry = click.prompt("Input new entry", type=str)
+                mood = click.prompt("Input new mood", type=str)
+                self.Entries.upsert({
+                    "id": row[0],
+                    "today": today,
+                    "entry": entry,
+                    "mood": mood,
+                }, pk="id")
+                break
+            else:
+                self.number += 1
+        return None
 
     def remove(self, remove):
         try:
@@ -102,8 +108,12 @@ this class include:
 *** Function for searching and then pick up row for editing
 '''
 class searchMethod:
-    def picker(self, row):
-        today = click.prompt("Type day for searching.", type=str)
+    def __init__(self):
+        self.con = Database(sqlite3.connect("Entries.db"))
+        self.Entries = self.con["Entries"]
+        self.number = 0
+
+    def picker(self, today, row):
         query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
         cursor = self.con.execute(query)
         rows = cursor.fetchall()
@@ -111,6 +121,7 @@ class searchMethod:
             click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
             answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
             if answer.lower() == "yes" or "1":
-                return row
+                return row[0]
             else:
-                break
+                self.number += 1
+        return None

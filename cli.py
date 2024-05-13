@@ -1,8 +1,8 @@
-from diaryMain import Diary
+from diaryMain import Diary, searchMethod
 import click
 
 diary = Diary()
-
+searchM = searchMethod()
 @click.group()
 def cli():
     """my cli"""
@@ -31,18 +31,14 @@ def search(today):
     else:
         click.echo("Entry not found")
 
-@cli.command("edit")
+@cli.command("change")
 @click.option("-t", "--today", prompt="Input date for search", help="Date for search")
-def search(today):
+def picker(today):
     """Edit entry"""
-    row = diary.search(today, None, None)
-    do = diary
-    if row:
-        click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+    check = diary.change(today, None)
+    if check:
+        click.echo("Entry not found")
     else:
-        diary.change(today, 0, 0, row)
-        click.option("-e", "--entry", prompt="Input new text", help="The edit entry")
-        click.option("-m", "--mood", prompt="Input new mood", help="The edit mood of the entry")
         click.echo(f"Row was succesful edited")
 
 @cli.command("del")
