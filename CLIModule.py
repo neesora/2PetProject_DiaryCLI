@@ -1,12 +1,14 @@
 from diaryMain import Diary
 import click
 
+diary = Diary()
+
 @click.group()
 def cli():
     """my cli"""
     pass
+
 #create the top-level parser and create class-insance
-diary = Diary()
 @cli.command("append")
 @click.option("-e", "--entry", prompt="Input some text", help="The diary entry")
 @click.option("-m", "--mood", prompt="Input the mood", help="The mood of the entry")

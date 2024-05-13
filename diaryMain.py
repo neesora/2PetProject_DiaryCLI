@@ -71,18 +71,13 @@ class Diary:
             else:
                 self.number += 1
         return None
-            
-        #make check will show "you was search this row?" if "2", then next row by prioritize
-        #make for last picked row was selected.
-        #I can create temporary table with query result ORDER BY id and NEXT row which ID <(>) idIter then choice "Yes" or "No"
 
-    def change(self, today, entry, mood, row):
-        id = pickRow.searchedRow(row)
-        id = row[0]
+    def change(self, today, entry, mood):
+        row = searchMethod.picker(row="")
         #here func search with option next row by prioritize or stay
         try:
             self.Entries.upsert({
-                "id": id,
+                "id": row[0],
                 "today": today,
                 "entry": entry,
                 "mood": mood,
@@ -101,6 +96,21 @@ class Diary:
     def test(self, row):
         for row in self.Entries.rows:
             return row
-class pickRow:
-    def searchedRow(row):
-        row = Diary.search(row)
+'''
+this class include:
+*** Function for searching and selection excpect row
+*** Function for searching and then pick up row for editing
+'''
+class searchMethod:
+    def picker(self, row):
+        today = click.prompt("Type day for searching.", type=str)
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+        cursor = self.con.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
+            answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
+            if answer.lower() == "yes":
+                return row
+            else:
+                break
