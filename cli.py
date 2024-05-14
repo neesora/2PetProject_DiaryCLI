@@ -40,16 +40,5 @@ def picker(today):
     else:
         click.echo(f"Row was succesful edited")
 
-@cli.command("del")
-@click.option("-r", "--remove", prompt="Input ID for del", help="Row ID for deletion")
-def remove(remove):
-    """Remove entry"""
-    word = diary.remove(remove)
-    if word == "Error":
-        click.echo(f"Row isn't founded")
-    else:
-        diary.remove(remove)
-        click.echo(f"Row was succesful removed")
-
 if __name__ == '__main__':
     cli()
