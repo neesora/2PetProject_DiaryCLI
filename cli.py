@@ -1,8 +1,7 @@
-from diaryMain import Diary, searchMethod
+from diaryMain import Diary
 import click
 
 diary = Diary()
-searchM = searchMethod()
 @click.group()
 def cli():
     """my cli"""
