@@ -76,49 +76,24 @@ class Diary:
         for row in rows:
             click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
             if click.confirm("This is right row?"):
-                entry = click.prompt("Input new entry", type=str)
-                mood = click.prompt("Input new mood", type=str)
-                self.Entries.upsert({
-                    "id": row[0],
-                    "today": today,
-                    "entry": entry,
-                    "mood": mood,
-                }, pk="id")
+                answer = click.prompt("Input d or c for deletion or changing", type=str)
+                if answer == "c":
+                    self.update_entry(row[0], today)
+                elif answer == "d":
+                    self.remove(row[0])
                 break
             else:
                 self.number += 1
         return None
+    def update_entry(self, id, today):
+        entry = click.prompt("Input new entry", type=str)
+        mood = click.prompt("Input new mood", type=str)
+        self.Entries.upsert({
+            "id": id,
+            "today": today,
+            "entry": entry,
+            "mood": mood,
+        }, pk="id")
 
-    def remove(self, remove):
-        try:
-            self.Entries.delete(remove)
-        except NotFoundError:
-            word = "Error"
-            return word
-
-    def test(self, row):
-        for row in self.Entries.rows:
-            return row
-'''
-this class include:
-*** Function for searching and selection excpect row
-*** Function for searching and then pick up row for editing
-'''
-class searchMethod:
-    def __init__(self):
-        self.con = Database(sqlite3.connect("Entries.db"))
-        self.Entries = self.con["Entries"]
-        self.number = 0
-
-    def picker(self, today, row):
-        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
-        cursor = self.con.execute(query)
-        rows = cursor.fetchall()
-        for row in rows:
-            click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
-            answer = click.prompt("Is this the correct entry? (Yes/No)", type=str)
-            if answer.lower() == "yes" or "1":
-                return row[0]
-            else:
-                self.number += 1
-        return None
+    def remove(self, id):
+            self.Entries.delete(id)
