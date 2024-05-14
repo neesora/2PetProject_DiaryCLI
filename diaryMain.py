@@ -1,7 +1,5 @@
 '''
 TODO LIST:
-0. Do del func
-1. Do search separate func and connect to edit and del. [TBC]
 1.1 Make better view
 2. Simple UI [TBC]
 DESC:
