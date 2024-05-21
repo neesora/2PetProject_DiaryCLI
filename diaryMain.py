@@ -18,7 +18,7 @@ class Diary:
         self.Entries = self.con["Entries"]
         self.number = 0
 
-    def idGenerator(self, id):
+    def assignment_ID(self, id):
         query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
         cursor = self.con.execute(query)
         cursor.execute("SELECT COUNT(*) FROM Entries")
@@ -32,7 +32,7 @@ class Diary:
             id = 0
             return id
 
-    def createDB(self):
+    def create_DB(self):
         self.Entries.create({
             "id": int,
             "today": str,
@@ -41,7 +41,7 @@ class Diary:
         }, pk="id", not_null=set())
 
     def append(self, entry, mood):
-        self.idX = Diary.idGenerator(self, id="")
+        self.idX = Diary.assignment_ID(self, id="")
         today = date.today()
         try:
             self.Entries.insert_all([{
@@ -74,11 +74,11 @@ class Diary:
         for row in rows:
             click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
             if click.confirm("This is right row?"):
-                answer = click.prompt("Input d or c for deletion or changing", type=str)
+                answer = click.prompt("Input [d/C] for deletion or changing", type=str)
                 if answer == "c":
                     self.update_entry(row[0], today)
                 elif answer == "d":
-                    self.remove(row[0])
+                    self.remove_entry(row[0])
                 break
             else:
                 self.number += 1
@@ -93,5 +93,5 @@ class Diary:
             "mood": mood,
         }, pk="id")
 
-    def remove(self, id):
+    def remove_entry(self, id):
             self.Entries.delete(id)
