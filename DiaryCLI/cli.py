@@ -1,4 +1,4 @@
-from diaryMain import Diary
+from DiaryCLI.diaryMain import Diary
 import click
 
 diary = Diary()
