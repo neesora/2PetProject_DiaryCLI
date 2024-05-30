@@ -1,11 +1,3 @@
-'''
-TODO LIST:
-1.1 Make better view
-2. Simple UI [TBC]
-DESC:
-- list, dict, index, class, def(how to working with obj)
-- sqlite3: create table, set primary key, insert values, modify them, del row
-'''
 import sqlite3
 import click
 from sqlite_utils import Database
@@ -18,7 +10,7 @@ class Diary:
         self.Entries = self.con["Entries"]
         self.number = 0
 
-    def assignment_ID(self, id):
+    def assignment_ID(self, id): #need for append function and assign ID = pk
         query = "SELECT * FROM Entries ORDER BY id DESC LIMIT 1;"
         cursor = self.con.execute(query)
         cursor.execute("SELECT COUNT(*) FROM Entries")
@@ -32,7 +24,7 @@ class Diary:
             id = 0
             return id
 
-    def create_DB(self):
+    def create_DB(self): #use only once when Entries.db isn't exist
         self.Entries.create({
             "id": int,
             "today": str,
@@ -40,7 +32,7 @@ class Diary:
             "mood": str,
         }, pk="id", not_null=set())
 
-    def append(self, entry, mood):
+    def append(self, entry, mood): #append new row in Entries.db with id+1 from last
         self.idX = Diary.assignment_ID(self, id="")
         today = date.today()
         try:
@@ -54,7 +46,7 @@ class Diary:
             word = "Error"
             return word
 
-    def search(self, today, answer, row):
+    def search(self, today, answer, row): #searching row by date in format dd-mm-yyyy
         query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
         cursor = self.con.execute(query)
         rows = cursor.fetchall()
@@ -67,17 +59,17 @@ class Diary:
                 self.number += 1
         return None
 
-    def change(self, today, row):
-        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id"
+    def change(self, today, row): #function for editing rows
+        query = f"SELECT * FROM Entries WHERE today = '{today}' ORDER BY id" #selecting all row include date in format dd-mm-yyyy
         cursor = self.con.execute(query)
         rows = cursor.fetchall()
         for row in rows:
             click.echo(f"Founded entry: \n Date: {row[1]} Entry: {row[2]} Mood: {row[3]}")
-            if click.confirm("This is right row?"):
+            if click.confirm("This is right row?"): #select certain row for editing
                 answer = click.prompt("Input [d/C] for deletion or changing", type=str)
-                if answer == "c":
+                if answer == "c": #editing selected row: attribute entry and mood
                     self.update_entry(row[0], today)
-                elif answer == "d":
+                elif answer == "d": #deleting selected row
                     self.remove_entry(row[0])
                 break
             else:
