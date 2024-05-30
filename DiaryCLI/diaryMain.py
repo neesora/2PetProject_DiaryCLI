@@ -1,7 +1,6 @@
 import sqlite3
 import click
 from sqlite_utils import Database
-from sqlite_utils.db import NotFoundError
 from datetime import date
 
 class Diary:
